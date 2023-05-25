@@ -17,6 +17,9 @@ C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins
 ```
 
 ## Plugin list
+<picture>
+  
 ![Plugin list](list.webp)
-
+  
+</picture>
 
