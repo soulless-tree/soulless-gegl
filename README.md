@@ -16,6 +16,7 @@ Windows
 C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins
 ```
 
-## List of plugins
+## Plugin list
+![Plugin list](list.webp)
 
 
