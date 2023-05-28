@@ -27,6 +27,7 @@ property_double (metallic_effect, _("Metallic Effect"), 1.5)
   description (_("Strength of the metallic effect"))
   value_range (0, 5)
   ui_steps    (0.1, 1.0)
+  ui_digits   (2) 
 
 property_boolean (invert, _("Invert Metallic"), FALSE)
 
@@ -35,21 +36,23 @@ property_double (red_frequency, _("Red Frequency"), 5.0)
   description (_("Red frequency"))
   value_range (0, 20)
   ui_steps    (0.1, 1.0)
-  ui_digits   (1) 
+  ui_digits   (2) 
 
 property_double (green_frequency, _("Green Frequency"), 3.0)
   description (_("Green frequency"))
   value_range (0, 20)
   ui_steps    (0.1, 1.0)
+  ui_digits   (2) 
 
 property_double (blue_frequency, _("Blue Frequency"), 0.3)
   description (_("Blue frequency"))
   value_range (0, 20)
   ui_steps    (0.1, 1.0)
+  ui_digits   (2) 
 
 /*UI: Shadow Controls*/
 property_double (holo_shadow_threshold, _("Shadow Colors Threshold"), 0.55)
-  description (_("Presence of color in the shadow areas"))
+  description (_("Absence of color in the shadow areas"))
   value_range (0, 1)
   ui_steps    (0.05, 0.1)
 
@@ -59,7 +62,7 @@ property_double (holo_shadow_opacity, _("Opacity"), 1)
 
 /*UI: Light Controls*/
 property_double (holo_light_threshold, _("Light Colors Threshold"), 0.4)
-  description (_("Presence of color in the light areas"))
+  description (_("Absence of color in the light areas"))
   value_range (0, 1)
   ui_steps    (0.05, 0.1)
 
@@ -109,16 +112,16 @@ static void update_graph(GeglOperation *operation)
 
   if (o->invert)
   {
-    gegl_node_link_many (state->input, state->metallic_1, state->metallic_2, state->invert, state->src_holo_1, state->darken, state->holo_shadow_opacity, state->src_metal, state->holo_shadow, state->src_holo_2, state->lighten, state->holo_light_opacity, state->src_metal_n_shadows, state->holo_light, state->output, NULL);
+    gegl_node_link_many (state->input, state->metallic_1, state->metallic_2, state->saturation, state->invert, state->src_holo_1, state->darken, state->holo_shadow_opacity, state->src_metal, state->holo_shadow, state->src_holo_2, state->lighten, state->holo_light_opacity, state->src_metal_n_shadows, state->holo_light, state->output, NULL);
 
     gegl_node_connect_from(state->src_metal, "aux", state->invert, "output");
     gegl_node_connect_from(state->holo_shadow, "aux", state->holo_shadow_opacity, "output");
   }
   else
   {
-    gegl_node_link_many (state->input, state->metallic_1, state->metallic_2, state->src_holo_1, state->darken, state->holo_shadow_opacity, state->src_metal, state->holo_shadow, state->src_holo_2, state->lighten, state->holo_light_opacity, state->src_metal_n_shadows, state->holo_light, state->output, NULL);
+    gegl_node_link_many (state->input, state->metallic_1, state->metallic_2, state->saturation, state->src_holo_1, state->darken, state->holo_shadow_opacity, state->src_metal, state->holo_shadow, state->src_holo_2, state->lighten, state->holo_light_opacity, state->src_metal_n_shadows, state->holo_light, state->output, NULL);
 
-    gegl_node_connect_from(state->src_metal, "aux", state->metallic_2, "output");
+    gegl_node_connect_from(state->src_metal, "aux", state->saturation, "output");
     gegl_node_connect_from(state->holo_shadow, "aux", state->holo_shadow_opacity, "output");
   }
 }
@@ -174,7 +177,7 @@ static void attach(GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "holo_light_opacity", holo_light_opacity, "value");
 
   /*Node connections*/
-  gegl_node_link_many (input, metallic_1, metallic_2, src_holo_1, darken, holo_shadow_opacity, src_metal, holo_shadow, src_holo_2, lighten, holo_light_opacity, src_metal_n_shadows, holo_light, output, NULL);
+  gegl_node_link_many (input, metallic_1, metallic_2, saturation, src_holo_1, darken, holo_shadow_opacity, src_metal, holo_shadow, src_holo_2, lighten, holo_light_opacity, src_metal_n_shadows, holo_light, output, NULL);
   
   gegl_node_connect_from(src_holo_1, "aux", holo, "output");
   gegl_node_link_many (input, holo, NULL);
@@ -182,7 +185,7 @@ static void attach(GeglOperation *operation)
   gegl_node_connect_from(darken, "aux", holo_shadow_threshold, "output");
   gegl_node_link_many (src_holo_1, holo_shadow_threshold, NULL);
 
-  gegl_node_connect_from(src_metal, "aux", metallic_2, "output");
+  gegl_node_connect_from(src_metal, "aux", saturation, "output");
   gegl_node_connect_from(holo_shadow, "aux", holo_shadow_opacity, "output");
 
   gegl_node_connect_from(src_holo_2, "aux", holo, "output");
