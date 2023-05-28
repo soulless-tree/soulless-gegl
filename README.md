@@ -17,10 +17,5 @@ C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins
 ```
 
 ## Plugin list
-<picture>
   
-![Chromatic Aberration](./list/1.webp)
-![Holographic Effect](./list/2.webp)
-  
-</picture>
-
+<picture><img src="list/1.jpg" width="506"></picture><picture><img src="list/2.jpg" width="506"></picture>
